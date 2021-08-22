@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import "../styles/HourlyForeCast.css";
 
@@ -11,7 +11,6 @@ function HourlyForeCast({ dataInput, dataEnteredFlag, setDataEnteredFlag }) {
     // Code that will be executed only for initial render//
 
     if (oneFlag) {
-      console.log("done first exec");
       const successfulLookup = (position) => {
         const { latitude, longitude } = position.coords;
 
@@ -63,7 +62,7 @@ function HourlyForeCast({ dataInput, dataEnteredFlag, setDataEnteredFlag }) {
 
     // Below Block Of Code is Re-Render code i.e., code that will be executed everytime a city name is entered.//////////////////////////////////////////////
 
-    if (dataEnteredFlag == true) {
+    if (dataEnteredFlag == true && dataInput != "") {
       var latitude;
       var longitude;
       const getLatitudeAndLongitude = async () => {
@@ -73,58 +72,46 @@ function HourlyForeCast({ dataInput, dataEnteredFlag, setDataEnteredFlag }) {
           )
           .catch((err) => console.log(err));
 
-          console.log("bad response:",res.data);
+        if (res.data.results.length != 0) {
+          latitude = res.data.results[0].geometry.lat;
+          longitude = res.data.results[0].geometry.lng;
 
-          if(res.data.results.length!=0){
+          const fetchForeCastWeather = async () => {
+            const res = await axios
+              .get(
+                `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=current,minutely,daily,alerts&appid=624bc7ea92b246f0df3f1b95d9df47f7`
+              )
+              .catch((err) => console.log(err));
 
-        latitude = res.data.results[0].geometry.lat;
-        longitude = res.data.results[0].geometry.lng;
+            let arr = res.data.hourly;
 
-        console.log("latitude is:", latitude);
-        console.log("longitude is:", longitude);
+            arr.map((item) => {
+              let unix_timestamp = item.dt;
 
-        const fetchForeCastWeather = async () => {
-          const res = await axios
-            .get(
-              `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=current,minutely,daily,alerts&appid=624bc7ea92b246f0df3f1b95d9df47f7`
-            )
-            .catch((err) => console.log(err));
+              var date = new Date(unix_timestamp * 1000);
+              // // Hours part from the timestamp
+              var hours = date.getHours();
+              // // Minutes part from the timestamp
+              var minutes = "0" + date.getMinutes();
+              // // Seconds part from the timestamp
+              var seconds = "0" + date.getSeconds();
 
-          let arr = res.data.hourly;
+              // // Will display time in 10:30:23 format
+              var formattedTime =
+                hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2);
 
-          arr.map((item) => {
-            let unix_timestamp = item.dt;
+              item.dt = formattedTime;
+            });
 
-            var date = new Date(unix_timestamp * 1000);
-            // // Hours part from the timestamp
-            var hours = date.getHours();
-            // // Minutes part from the timestamp
-            var minutes = "0" + date.getMinutes();
-            // // Seconds part from the timestamp
-            var seconds = "0" + date.getSeconds();
+            setEachHourContents(arr);
+          };
 
-            // // Will display time in 10:30:23 format
-            var formattedTime =
-              hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2);
-
-            item.dt = formattedTime;
-          });
-
-          
-
-          setEachHourContents(arr);
-        };
-
-        fetchForeCastWeather();
-      }
+          fetchForeCastWeather();
+        }
       };
 
       getLatitudeAndLongitude();
-
-      console.log("I am true, so I render");
     }
-
-    console.log(dataEnteredFlag);
   }, [dataEnteredFlag]);
 
   return (

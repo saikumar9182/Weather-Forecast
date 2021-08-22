@@ -4,33 +4,63 @@ import HourlyForeCast from "./Components/HourlyForeCast.jsx";
 import SevenDayForeCast from "./Components/SevenDayForeCast";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { CurrentWeatherContext } from "./Helper/Context";
-import { HourlyForeCastContext } from "./Helper/Context";
-import { SevenDayForeCastContext } from "./Helper/Context";
+
 import {CityContext} from './Helper/Context';
+
+
 
 function App() {
   const [dataInput, setDataInput] = useState("");
   const [dataEnteredFlag, setDataEnteredFlag] = useState(false);
-  const [CurrentWeatherContextFlag,setCurrentWeatherContextFlag]=useState(true);
-  const [HourlyForeCastContextFlag,setHourlyForeCastContextFlag]=useState(true);
-  const [SevenDayForeCastContextFlag,setSevenDayForeCastContextFlag]=useState(true);
+  
   const [CityContextFlag,setCityContextFlag]=useState(false);
 
   function inputSetter(e) {
     if (e.keyCode == 13) {
       setDataEnteredFlag(true);
       setDataInput(e.target.value.slice(0, e.target.value.length));
+      
     } else {
       setDataEnteredFlag(false);
+      
     }
   }
+  
+
+  useEffect(()=>{
+    
+      const successfulLookup = (position) => {
+          const { latitude, longitude } = position.coords;
+
+          const fetchCurrentLocation= async()=>{
+              const result= await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=c9dd1926572844bfbac5c27f69c5f3ce`);
+
+              
+              setDataInput(result.data.results[0].components.village)
+
+          }
+
+          fetchCurrentLocation();
+
+          
+      };
+
+      const failedLookUp = () => {
+          console.log("failed to load");
+      };
+
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(successfulLookup, failedLookUp);
+      }
+      
+  
+
+
+  },[])
 
   return (
 
-    <CurrentWeatherContext.Provider value={{CurrentWeatherContextFlag,setCurrentWeatherContextFlag}}>
-      <HourlyForeCastContext.Provider value={{HourlyForeCastContextFlag,setHourlyForeCastContextFlag}}>
-        <SevenDayForeCastContext.Provider value={{SevenDayForeCastContextFlag,setSevenDayForeCastContextFlag}}>
+    
           <CityContext.Provider value={{CityContextFlag,setCityContextFlag}}>
 
     <div className="App">
@@ -45,23 +75,25 @@ function App() {
 
       <div className="flexr">
 
-       {CurrentWeatherContextFlag? <CurrentWeather
+       
+
+ <CurrentWeather
           dataInput={dataInput}
           dataEnteredFlag={dataEnteredFlag}
-        />:""}
+          
+        />
         
-              {HourlyForeCastContextFlag?<HourlyForeCast dataInput={dataInput} dataEnteredFlag={dataEnteredFlag} setDataEnteredFlag={setDataEnteredFlag} />:""}
+              <HourlyForeCast dataInput={dataInput} dataEnteredFlag={dataEnteredFlag} setDataEnteredFlag={setDataEnteredFlag} />
+
 
       </div>
 
       
-      {SevenDayForeCastContextFlag?<SevenDayForeCast dataEnteredFlag={dataEnteredFlag} dataInput={dataInput}/>:""}
+      <SevenDayForeCast dataEnteredFlag={dataEnteredFlag} dataInput={dataInput}/>
+
     </div>
     </CityContext.Provider>
-    </SevenDayForeCastContext.Provider>
-
-    </HourlyForeCastContext.Provider>
-    </CurrentWeatherContext.Provider>
+    
 
 
 
