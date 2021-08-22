@@ -93,11 +93,14 @@ function SevenDayForeCast({ dataEnteredFlag, dataInput }) {
   }, [dataEnteredFlag]);
 
   return (
-    <div className="flexc">
-      <h1>7-day weather report</h1>
+    <>
+          <h1>7-day weather report</h1>
+
+    <div className="flexro">
+      {/* <h1>7-day weather report</h1> */}
 
       {sevenDaysContent.map((day) => (
-        <div className="flexr">
+        <div style={{border:"1px solid white"}} className="flexco">
           <div style={{ margin: "15px" }}>{day.dt}</div>
           <div style={{ margin: "15px" }}>
             {Math.floor(day.temp.max - 270)}
@@ -112,6 +115,7 @@ function SevenDayForeCast({ dataEnteredFlag, dataInput }) {
         </div>
       ))}
     </div>
+    </>
   );
 }
 
