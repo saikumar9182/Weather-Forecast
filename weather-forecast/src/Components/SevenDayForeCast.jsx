@@ -61,9 +61,15 @@ if(dataEnteredFlag==true ){
         await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${dataInput}&key=c9dd1926572844bfbac5c27f69c5f3ce`)
        .catch(err=>console.log(err));
 
+       console.log("Here I am",res.data.results);
+
+       if(res.data.results.length!=0){
+
+
        
         latitude= res.data.results[0].geometry.lat;
         longitude=  res.data.results[0].geometry.lng; 
+
         
         console.log("latitude is:",latitude);
         console.log("longitude is:",longitude);
@@ -81,7 +87,7 @@ if(dataEnteredFlag==true ){
             let unix_timestamp = item.dt;
             var date = new Date(unix_timestamp * 1000);
             // console.log(date.getUTCMonth());
-            console.log(date.getDay());
+            // console.log(date.getDay());
             item.dt= date.getMonth()+1 +"/"+ date.getDate();
     
     
@@ -94,6 +100,7 @@ if(dataEnteredFlag==true ){
         }
     
         fetchForeCastWeather();
+      }
     }
 
     getLatitudeAndLongitude();
@@ -117,7 +124,7 @@ if(dataEnteredFlag==true ){
             sevenDaysContent.map((day)=>(
                 <div className="flexr">
                 <div style={{margin:"15px"}}>{day.dt}</div>
-                <div style={{margin:"15px"}}>{Math.ceil(day.temp.max-270)}<span>&#8451;</span>/{Math.ceil(day.temp.min-270)}<span>&#8451;</span></div>
+                <div style={{margin:"15px"}}>{Math.floor(day.temp.max-270)}<span>&#8451;</span>/{Math.floor(day.temp.min-273.15)}<span>&#8451;</span></div>
 
                 <img src= {`http://openweathermap.org/img/w/${day.weather[0].icon}.png`}></img>
                 <div style={{margin:"15px"}}>{day.weather[0].main}</div>

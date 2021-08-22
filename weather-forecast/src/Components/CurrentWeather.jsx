@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/CurrentWeather.css";
+import { CurrentWeatherContext } from "../Helper/Context";
+import { HourlyForeCastContext } from "../Helper/Context";
+import { SevenDayForeCastContext } from "../Helper/Context";
+import {CityContext} from '../Helper/Context';
 
 function CurrentWeather({ dataInput,dataEnteredFlag }) {
     const [currentTemperature, setCurrentTemperature] = useState("");
@@ -27,7 +31,7 @@ function CurrentWeather({ dataInput,dataEnteredFlag }) {
         
 
             if(res!=undefined){
-            setCurrentTemperature(Math.ceil(res.data.main.feels_like - 273.15));
+            setCurrentTemperature(Math.floor(res.data.main.feels_like - 273.15));
             setCurrentWindSpeed(res.data.wind.speed);
             setCurrentHumidity(res.data.main.humidity);
             setCurrentState(res.data.weather[0].main);
@@ -53,7 +57,7 @@ function CurrentWeather({ dataInput,dataEnteredFlag }) {
 
                
 
-                setCurrentTemperature(Math.ceil(res.data.main.feels_like - 273.15));
+                setCurrentTemperature(Math.floor(res.data.main.feels_like - 273.15));
                 setCurrentWindSpeed(res.data.wind.speed);
                 setCurrentHumidity(res.data.main.humidity);
                 setCurrentState(res.data.weather[0].main);

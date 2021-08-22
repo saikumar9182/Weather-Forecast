@@ -50,6 +50,8 @@ function HourlyForeCast({ dataInput, dataEnteredFlag, setDataEnteredFlag }) {
         console.log("failed to load");
       };
 
+      // Checking if browser supports location feature
+
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           successfulLookup,
@@ -145,7 +147,7 @@ function HourlyForeCast({ dataInput, dataEnteredFlag, setDataEnteredFlag }) {
 
           <div>
             <h2 style={{ fontSize: "50px", marginTop: "0" }}>
-              {Math.ceil(hour.feels_like - 273.15)}
+              {Math.floor(hour.feels_like - 273.15)}
               <span>&#8451;</span>
             </h2>
             <h2>{hour.weather[0].main}</h2>
