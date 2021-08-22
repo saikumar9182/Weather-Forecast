@@ -1,0 +1,25 @@
+*,::after,::before{
+    box-sizing: border-box;
+}
+
+.container{
+    background-color: #262431;
+    height: 400px;
+    max-width:400px;
+    overflow: auto;
+    margin: 30px;
+    border: 1px solid white;
+    /* padding:5px; */
+    
+    
+    
+    
+}
+
+
+
+.container div{
+    margin: 30px;
+
+}
+

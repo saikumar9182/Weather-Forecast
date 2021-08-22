@@ -16,18 +16,18 @@ function CurrentWeather({ dataInput,dataEnteredFlag }) {
 
         const fetchCityData= async()=>{
 
-            const res= await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${dataInput}&appid=8931ece3d1ad872304ee0438c2e907c4`)
+            const res= await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${dataInput}&appid=624bc7ea92b246f0df3f1b95d9df47f7`)
             .catch(err=>{
                 
                 console.log(err)});
 
-                console.log(res);
+                // console.log(res);
 
 
         
 
             if(res!=undefined){
-            setCurrentTemperature(Math.ceil(res.data.main.feels_like - 270));
+            setCurrentTemperature(Math.ceil(res.data.main.feels_like - 273.15));
             setCurrentWindSpeed(res.data.wind.speed);
             setCurrentHumidity(res.data.main.humidity);
             setCurrentState(res.data.weather[0].main);
@@ -39,7 +39,7 @@ function CurrentWeather({ dataInput,dataEnteredFlag }) {
 
     }
     else{
-        console.log("flag is not")
+        // console.log("flag is not")
     }
 
     useEffect(() => {
@@ -48,16 +48,16 @@ function CurrentWeather({ dataInput,dataEnteredFlag }) {
 
             const fetchCurrentWeather = async () => {
                 const res = await axios.get(
-                    `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=8931ece3d1ad872304ee0438c2e907c4`
+                    `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=624bc7ea92b246f0df3f1b95d9df47f7`
                 );
 
                
 
-                setCurrentTemperature(Math.ceil(res.data.main.feels_like - 270));
+                setCurrentTemperature(Math.ceil(res.data.main.feels_like - 273.15));
                 setCurrentWindSpeed(res.data.wind.speed);
                 setCurrentHumidity(res.data.main.humidity);
                 setCurrentState(res.data.weather[0].main);
-                console.log(currentWindSpeed,currentTemperature);
+                // console.log(currentWindSpeed,currentTemperature);
             };
 
             fetchCurrentWeather();
@@ -73,7 +73,8 @@ function CurrentWeather({ dataInput,dataEnteredFlag }) {
     }, []);
 
     return (
-        <div>
+        <div style={{}}>
+            <h1>Current Weather</h1>
             <h1 id="currentWeatherTemperature">
                 {currentTemperature}
                 <span>&#8451;</span>
@@ -87,7 +88,7 @@ function CurrentWeather({ dataInput,dataEnteredFlag }) {
             </h3>
             <h3 style={{ display: "inline" }}>
                 <i class="fas fa-wind" aria-hidden="true"></i>
-                {currentWindSpeed}km/h
+                {currentWindSpeed}m/s
             </h3>
         </div>
     );
