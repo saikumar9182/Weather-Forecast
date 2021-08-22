@@ -37,7 +37,7 @@ function App() {
       </div>
 
       
-      {/* <SevenDayForeCast dataEnteredFlag={dataEnteredFlag} dataInput={dataInput}/> */}
+      <SevenDayForeCast dataEnteredFlag={dataEnteredFlag} dataInput={dataInput}/>
     </div>
   );
 }
