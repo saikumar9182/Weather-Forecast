@@ -24,7 +24,8 @@ function CurrentWeather({ dataInput, dataEnteredFlag, setDataInput }) {
             `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=624bc7ea92b246f0df3f1b95d9df47f7`
           );
 
-          setCurrentTemperature(Math.floor(res.data.main.feels_like - 273.15));
+          setCurrentTemperature(Math.floor(res.data.main.temp - 273.15));
+          console.log(res.data);
           setCurrentWindSpeed(res.data.wind.speed);
           setCurrentHumidity(res.data.main.humidity);
           setCurrentState(res.data.weather[0].main);
@@ -57,7 +58,7 @@ function CurrentWeather({ dataInput, dataEnteredFlag, setDataInput }) {
           });
 
         if (res != undefined) {
-          setCurrentTemperature(Math.floor(res.data.main.feels_like - 273.15));
+          setCurrentTemperature(Math.floor(res.data.main.temp - 273.15));
           setCurrentWindSpeed(res.data.wind.speed);
           setCurrentHumidity(res.data.main.humidity);
           setCurrentState(res.data.weather[0].main);
